@@ -1,0 +1,84 @@
+# BiaPy version: 3.6.8
+
+SYSTEM:
+    NUM_CPUS: -1
+
+PROBLEM:
+    TYPE: INSTANCE_SEG
+    NDIM: 3D
+    INSTANCE_SEG:
+        DATA_CHANNELS: [ "F", "C" ]
+        DATA_CHANNEL_WEIGHTS: (1.0, 1.0)
+        WATERSHED:
+            SEED_CHANNELS: [ "F", "C" ]
+            SEED_CHANNELS_THRESH: [ 0.2 , 0.2 ]
+            TOPOGRAPHIC_SURFACE_CHANNEL: "F"
+            GROWTH_MASK_CHANNELS: [ "F" ]
+            GROWTH_MASK_CHANNELS_THRESH: [ "auto" ]
+  
+DATA: 
+    REFLECT_TO_COMPLETE_SHAPE: True
+    NORMALIZATION:
+        TYPE: "zero_mean_unit_variance"
+        PERC_CLIP:
+          ENABLE: True
+          LOWER_PERC: 0.1
+          UPPER_PERC: 99.8
+    PATCH_SIZE: (20, 256, 256, 1)
+    TRAIN:
+        PATH: /HWFS/zhaohu_lab/dingjiayi/data/260424_iterative_proofreading_training/biapy/train/raw
+        GT_PATH: /HWFS/zhaohu_lab/dingjiayi/data/260424_iterative_proofreading_training/biapy/train/label
+        IN_MEMORY: False
+    VAL:
+        PATH: /HWFS/zhaohu_lab/dingjiayi/data/260424_iterative_proofreading_training/biapy/val/raw
+        GT_PATH: /HWFS/zhaohu_lab/dingjiayi/data/260424_iterative_proofreading_training/biapy/val/label
+        FROM_TRAIN: False
+    TEST:
+        PATH: /HWFS/zhaohu_lab/dingjiayi/data/260424_iterative_proofreading_training/biapy/test/raw
+        GT_PATH: /HWFS/zhaohu_lab/dingjiayi/data/260424_iterative_proofreading_training/biapy/test/label
+        IN_MEMORY: False
+        LOAD_GT: False
+        PADDING: (4,16,16)
+
+AUGMENTOR:
+    ENABLE: True
+    RANDOM_ROT: True
+    VFLIP: True
+    HFLIP: True
+    ZFLIP: True
+    G_BLUR: True
+    BRIGHTNESS: True
+    BRIGHTNESS_FACTOR: (-0.1, 0.1)
+    CONTRAST: True
+    CONTRAST_FACTOR: (-0.1, 0.1)
+    ELASTIC: True
+    AFFINE_MODE: 'reflect'
+
+
+MODEL:
+    ARCHITECTURE: unext_v2
+    FEATURE_MAPS: [32, 64, 128, 256, 320]
+    Z_DOWN: [1,1,1,1]
+    LOAD_CHECKPOINT: False
+
+TRAIN:
+    ENABLE: True
+    OPTIMIZER: ADAMW
+    LR: 1.E-4
+    BATCH_SIZE: 6
+    EPOCHS: 1000
+    PATIENCE: 100
+    LR_SCHEDULER:
+        NAME: 'warmupcosine'
+        MIN_LR: 1.E-5
+        WARMUP_COSINE_DECAY_EPOCHS: 5
+
+TEST:
+    ENABLE: False
+    AUGMENTATION: False
+    FULL_IMG: False
+    POST_PROCESSING:
+        INSTANCE_REFINEMENT:
+            ENABLE: True
+            OPERATIONS: [ "remove_small_objects", "fill_holes" ]
+            VALUES: [ 1000, 'none' ]
