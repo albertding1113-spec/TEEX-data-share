@@ -26,16 +26,16 @@ DATA:
           UPPER_PERC: 99.8
     PATCH_SIZE: (20, 256, 256, 1)
     TRAIN:
-        PATH: /HWFS/zhaohu_lab/dingjiayi/data/260424_iterative_proofreading_training/biapy/train/raw
+        PATH: /HWFS/data/260424_iterative_proofreading_training/biapy/train/raw
         GT_PATH: /HWFS/zhaohu_lab/dingjiayi/data/260424_iterative_proofreading_training/biapy/train/label
         IN_MEMORY: False
     VAL:
-        PATH: /HWFS/zhaohu_lab/dingjiayi/data/260424_iterative_proofreading_training/biapy/val/raw
+        PATH: /HWFS/data/260424_iterative_proofreading_training/biapy/val/raw
         GT_PATH: /HWFS/zhaohu_lab/dingjiayi/data/260424_iterative_proofreading_training/biapy/val/label
         FROM_TRAIN: False
     TEST:
-        PATH: /HWFS/zhaohu_lab/dingjiayi/data/260424_iterative_proofreading_training/biapy/test/raw
-        GT_PATH: /HWFS/zhaohu_lab/dingjiayi/data/260424_iterative_proofreading_training/biapy/test/label
+        PATH: /HWFS/data/260424_iterative_proofreading_training/biapy/test/raw
+        GT_PATH: /HWFS/data/260424_iterative_proofreading_training/biapy/test/label
         IN_MEMORY: False
         LOAD_GT: False
         PADDING: (4,16,16)
